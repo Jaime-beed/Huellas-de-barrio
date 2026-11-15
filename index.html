@@ -347,21 +347,225 @@
         </form>
       </div>
 
-      <!-- MÓDULO DASHBOARD -->
-      <div id="step-dashboard" class="step-card hidden-step text-center py-4 space-y-5">
-        <div class="w-20 h-20 mx-auto rounded-full bg-orange-100 border-4 border-brand-400 flex items-center justify-center text-brand-600 text-3xl shadow-inner overflow-hidden">
-          <img id="dash-user-avatar" src="" alt="Avatar" class="w-full h-full object-cover hidden" />
-          <i id="dash-user-icon" class="fas fa-user text-2xl"></i>
+<!-- MÓDULO DASHBOARD (PANTALLA PRINCIPAL COMPLETA) -->
+<div id="step-dashboard" class="step-card hidden-step fixed inset-0 z-50 bg-slate-100 overflow-y-auto text-left font-sans">
+  
+  <!-- 1. BARRA DE NAVEGACIÓN SUPERIOR (HEADER) -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+    <!-- Logo -->
+    <div class="flex items-center gap-2.5">
+      <div class="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center text-white text-xl shadow-sm">
+        <i class="fas fa-paw"></i>
+      </div>
+      <div class="leading-tight">
+        <span class="font-black text-slate-800 text-lg block">Huellas</span>
+        <span class="font-semibold text-slate-600 text-xs block -mt-1">de Barrio</span>
+      </div>
+    </div>
+
+    <!-- Buscador global -->
+    <div class="flex-1 max-w-md mx-auto w-full order-3 md:order-2">
+      <div class="relative flex items-center">
+        <input type="text" id="dash-search-input" placeholder="Buscar raza, color o palabra clave..." 
+          class="w-full pl-4 pr-10 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-orange-500 focus:bg-white transition">
+        <i class="fas fa-search absolute right-3.5 text-slate-400"></i>
+      </div>
+    </div>
+
+    <!-- Controles derechos: Selector de colonia/radio + Campana + Perfil -->
+    <div class="flex items-center gap-3 order-2 md:order-3">
+      <!-- Selector de Colonia y Radio -->
+      <div class="hidden sm:flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-700">
+        <span class="text-slate-400 pr-2 border-r border-slate-200 mr-2 font-medium">Colonia</span>
+        <select id="dash-radius-select" class="bg-transparent font-bold text-slate-700 focus:outline-none cursor-pointer">
+          <option value="1">Radio: 1 km</option>
+          <option value="3" selected>Radio: 3 km</option>
+          <option value="fracc">Mi Fraccionamiento</option>
+        </select>
+      </div>
+
+      <!-- Campana de notificaciones -->
+      <button type="button" id="dash-notif-btn" class="relative w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 transition">
+        <i class="fas fa-bell"></i>
+        <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+      </button>
+
+      <!-- Menú de Perfil (Conserva los IDs exactos que usa auth.js) -->
+      <div class="relative" id="dash-profile-container">
+        <button type="button" id="dash-profile-btn" class="flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-full hover:bg-slate-100 transition">
+          <div class="w-10 h-10 rounded-full bg-orange-100 border-2 border-orange-500 flex items-center justify-center overflow-hidden">
+            <img id="dash-user-avatar" src="" alt="Avatar" class="w-full h-full object-cover hidden">
+            <i id="dash-user-icon" class="fas fa-user text-orange-500 text-lg"></i>
+          </div>
+          <div class="text-left hidden sm:block">
+            <h3 id="dash-user-name" class="text-xs font-extrabold text-slate-800 leading-tight">Vecino</h3>
+            <span id="dash-user-role" class="inline-block bg-orange-100 text-orange-700 text-[10px] px-1.5 py-0.2 rounded font-bold">Miembro</span>
+          </div>
+          <i class="fas fa-chevron-down text-xs text-slate-400"></i>
+        </button>
+
+        <!-- Dropdown con Correo, Configuración y Cerrar Sesión -->
+        <div id="dash-profile-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-40">
+          <div class="px-4 py-2 border-b border-slate-100">
+            <p class="text-[11px] text-slate-400 font-semibold">Sesión iniciada como:</p>
+            <p id="dash-user-email" class="text-xs font-bold text-slate-700 truncate">correo@ejemplo.com</p>
+          </div>
+          <a href="#ajustes" id="btn-open-settings" class="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+            <i class="fas fa-cog text-slate-400"></i> Configuración y Ajustes
+          </a>
+          <button id="btn-logout" type="button" class="w-full text-left flex items-center gap-2 px-4 py-2 text-xs font-bold text-red-500 hover:bg-red-50">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+          </button>
         </div>
-        <div>
-          <span id="dash-user-role" class="inline-block bg-orange-100 text-brand-700 text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider mb-2">Persona Normal</span>
-          <h3 id="dash-user-name" class="text-xl font-black text-slate-800">Cargando...</h3>
-          <p id="dash-user-email" class="text-xs text-slate-500 mt-0.5">correo@ejemplo.com</p>
-        </div>
-        <button id="btn-logout" class="w-full text-xs font-bold text-red-500 hover:text-red-700 py-1">
-          <i class="fas fa-sign-out-alt mr-1"></i> Cerrar Sesión
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR OPERATIVO CENTRAL -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-8 py-6 space-y-6">
+
+    <!-- 2. ACCESOS RÁPIDOS (ÁREA DE ACCIÓN COMUNITARIA) -->
+    <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex flex-wrap items-center gap-3">
+        <button type="button" id="btn-reportar-mascota" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2">
+          <span>Reportar Extraviada o Encontrada</span>
+          <span>🚨</span>
+        </button>
+
+        <button type="button" id="btn-publicar-adopcion" class="bg-white hover:bg-orange-50 text-orange-600 border-2 border-orange-500 font-bold text-sm px-5 py-2.5 rounded-xl transition flex items-center gap-2">
+          <span>Publicar en Adopción</span>
+          <i class="fas fa-paw"></i>
         </button>
       </div>
+
+      <!-- Interruptor: Ofrecerse como Hogar Temporal -->
+      <label class="flex items-center gap-3 cursor-pointer select-none ml-auto">
+        <div class="relative">
+          <input type="checkbox" id="dash-toggle-foster" class="sr-only peer" checked>
+          <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+        </div>
+        <span class="text-sm font-semibold text-slate-700">Ofrecerse como Hogar Temporal</span>
+      </label>
+    </section>
+
+    <!-- 3. FEED COMUNITARIO Y 4. PANEL LATERAL -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- ZONA 3: FEED COMUNITARIO (8 COLUMNAS EN ESCRITORIO) -->
+      <section class="lg:col-span-8 bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+        <!-- Navegación por Pestañas -->
+        <div class="flex border-b border-slate-200 gap-6 mb-5 overflow-x-auto">
+          <button type="button" data-tab="alertas" class="dash-tab-btn pb-3 text-sm font-bold text-orange-600 border-b-2 border-orange-600 whitespace-nowrap">
+            Alertas Activas
+          </button>
+          <button type="button" data-tab="adopciones" class="dash-tab-btn pb-3 text-sm font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent whitespace-nowrap">
+            Adopciones Locales
+          </button>
+          <button type="button" data-tab="mapa" class="dash-tab-btn pb-3 text-sm font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent whitespace-nowrap">
+            Mapa Interactivo
+          </button>
+        </div>
+
+        <!-- Contenido Pestaña 1: Alertas Activas -->
+        <div id="dash-tab-alertas" class="dash-tab-content grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Tarjeta 1: Urgente -->
+          <article class="dash-pet-card border border-slate-200 rounded-2xl overflow-hidden flex flex-col bg-white shadow-sm" data-keywords="perro mestizo miel urgente">
+            <div class="relative h-44 bg-slate-200">
+              <span class="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">Urgente</span>
+              <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80" alt="Perro" class="w-full h-full object-cover">
+            </div>
+            <div class="p-4 flex flex-col flex-1 justify-between space-y-3">
+              <div>
+                <p class="text-sm text-slate-800 font-medium leading-snug">Cruza de perro color miel, última ubicación vista cerca del parque de la colonia.</p>
+                <p class="text-xs text-slate-400 mt-1.5">Hoy a las 10:01</p>
+              </div>
+              <button type="button" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs py-2.5 rounded-xl transition">
+                Contactar
+              </button>
+            </div>
+          </article>
+
+          <!-- Tarjeta 2: Avistado -->
+          <article class="dash-pet-card border border-slate-200 rounded-2xl overflow-hidden flex flex-col bg-white shadow-sm" data-keywords="gato atigrado gris avistado">
+            <div class="relative h-44 bg-slate-200">
+              <span class="absolute top-3 left-3 bg-amber-300 text-slate-900 text-xs font-bold px-3 py-1 rounded-full shadow">Avistado</span>
+              <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80" alt="Gato" class="w-full h-full object-cover">
+            </div>
+            <div class="p-4 flex flex-col flex-1 justify-between space-y-3">
+              <div>
+                <p class="text-sm text-slate-800 font-medium leading-snug">Detalle del avistamiento: gato doméstico visto sobre la barda de la calle principal.</p>
+                <p class="text-xs text-slate-400 mt-1.5">Ayer a las 18:04</p>
+              </div>
+              <button type="button" class="w-full bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-bold text-xs py-2.5 rounded-xl transition">
+                Contactar al vecino
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <!-- Contenido Pestaña 2: Adopciones Locales -->
+        <div id="dash-tab-adopciones" class="dash-tab-content hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <article class="dash-pet-card border border-slate-200 rounded-2xl overflow-hidden flex flex-col bg-white shadow-sm" data-keywords="perro cachorro adopcion vacunado">
+            <div class="relative h-44 bg-slate-200">
+              <span class="absolute top-3 left-3 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">Vacunado / Esterilizado</span>
+              <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80" alt="Adopción" class="w-full h-full object-cover">
+            </div>
+            <div class="p-4 flex flex-col flex-1 justify-between space-y-3">
+              <div>
+                <p class="text-sm text-slate-800 font-medium leading-snug"><strong>Toby (8 meses, Mediano)</strong> — Rescatado y listo para un hogar definitivo.</p>
+                <p class="text-xs text-slate-400 mt-1.5">A 1.2 km de tu colonia</p>
+              </div>
+              <button type="button" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs py-2.5 rounded-xl transition">
+                Postularse para adoptar
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <!-- Contenido Pestaña 3: Mapa Interactivo -->
+        <div id="dash-tab-mapa" class="dash-tab-content hidden">
+          <div class="border-2 border-dashed border-slate-300 rounded-2xl p-10 text-center bg-slate-50 space-y-2">
+            <i class="fas fa-map-marked-alt text-3xl text-orange-500"></i>
+            <h4 class="font-bold text-slate-700 text-sm">Mapa Interactivo de Zona</h4>
+            <p class="text-xs text-slate-500">Visualizando reportes activos, hogares temporales y veterinarias en <span id="dash-map-radius-text" class="font-bold text-slate-700">Radio: 3 km</span>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ZONA 4: PANEL LATERAL (4 COLUMNAS EN ESCRITORIO) -->
+      <aside class="lg:col-span-4 space-y-5">
+        <!-- Mis Reportes Activos -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-3">
+          <h4 class="font-bold text-slate-800 text-sm">Mis Reportes Activos</h4>
+          <div class="flex items-center gap-3">
+            <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=120&q=80" alt="Mi reporte" class="w-12 h-12 rounded-full object-cover border border-slate-200">
+            <button type="button" id="btn-mark-resolved" class="flex-1 bg-slate-100 hover:bg-green-50 hover:text-green-700 hover:border-green-300 text-slate-700 border border-slate-200 font-bold text-xs py-2.5 px-3 rounded-xl transition">
+              Marcar como Resuelto ✔️
+            </button>
+          </div>
+        </div>
+
+        <!-- Directorio de Emergencia -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-3">
+          <div>
+            <h4 class="font-bold text-slate-800 text-sm">Directorio de Emergencia</h4>
+            <p class="text-xs text-slate-500 mt-1">Clínicas veterinarias aliadas</p>
+            <p class="text-xs text-slate-500">Servicios de control animal local</p>
+          </div>
+          <div class="space-y-2 pt-1">
+            <a href="tel:911" class="block w-full text-center bg-slate-200/80 hover:bg-slate-300 text-slate-800 font-bold text-xs py-2.5 rounded-xl transition">
+              Llamar Veterinaria 📞
+            </a>
+            <button type="button" id="btn-servicios-locales" class="w-full bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-bold text-xs py-2.5 rounded-xl transition">
+              Servicios Locales
+            </button>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+</div>
 
     </div>
   </div>
@@ -369,6 +573,7 @@
   <!-- Carga de controladores JavaScript -->
   <script type="module" src="js/app.js"></script>
   <script type="module" src="js/auth.js"></script>
+  <script type="module" src="Js/dashboard.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
